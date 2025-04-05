@@ -100,7 +100,7 @@
         style="background-image: url(./images/bgbanner.png)"
       >
         <section
-          class="mt-5 flex flex-col content-center items-start gap-20 p-5 lg:flex-row lg:items-center"
+          class="mt-5 flex flex-col content-center items-center gap-20 p-5 lg:flex-row lg:items-center"
         >
           <!-- left-hero-part -->
           <div>
@@ -149,7 +149,7 @@
                 />
                 <button
                   id="search-btn"
-                  onclick="searchLoadPhone()"
+                  onclick="searchQuery()"
                   class="btn btn-soft btn-accent inline-block h-full w-1/3 rounded-[50px] bg-[#0D6EFD] font-[mulish] text-lg font-semibold text-[#fff]"
                 >
                   Search
@@ -224,8 +224,8 @@
       <!-- search result part -->
       <section class="mt-12 flex flex-col gap-6 lg:flex-row">
         <!-- discuss-left-part -->
-        <article class="w-full lg:w-2/3">
-          <div
+        <article id="discuss-topic" class="flex flex-col gap-6 lg:w-2/3">
+          <!-- <div
             class="flex flex-col gap-5 rounded-3xl bg-[#f3f3f5] p-10 lg:flex-row"
           >
             <div class="avatar relative top-0 items-start">
@@ -272,16 +272,18 @@
                   </div>
                 </div>
                 <div
-                  class="flex h-10 w-10 items-center justify-center rounded-full bg-[#10b981] p-2"
+                  class="btn flex h-10 w-10 items-center justify-center rounded-full bg-[#10b981] p-2"
                 >
                   <i class="fa-regular fa-envelope-open text-white"></i>
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </article>
         <!-- discuss-right-part -->
-        <article class="w-full rounded-3xl bg-[#12132d0d] p-6 lg:w-1/3">
+        <article
+          class="max-h-fit w-full rounded-3xl bg-[#12132d0d] p-6 lg:w-1/3"
+        >
           <div class="flex justify-between">
             <h1 class="font-[mulish] text-xl font-bold text-[#12132d]">
               Title
@@ -289,12 +291,12 @@
             <div class="flex items-center gap-5">
               <i class="fa-solid fa-check-double text-green-500"></i>
               <p class="font-[inter] text-[#12132d99]">
-                Mark as read <span>(0)</span>
+                Mark as read (<span id="read-count">0</span>)
               </p>
             </div>
           </div>
-          <section>
-            <div
+          <section id="title-list">
+            <!-- <div
               class="mt-5 flex justify-between gap-5 rounded-2xl bg-[#fff] p-5"
             >
               <p>10 Kids Unaware of Their Halloween Costume</p>
@@ -302,7 +304,7 @@
                 <i class="fa-regular fa-eye"></i>
                 <h5>1530</h5>
               </div>
-            </div>
+            </div> -->
           </section>
         </article>
       </section>
