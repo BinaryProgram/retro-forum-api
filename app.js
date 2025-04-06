@@ -4,8 +4,14 @@ const postCategory = async (categoryName) => {
   );
   const data = await response.json();
   const items = data.posts;
-  console.log(items);
   displaySearchResult(items);
+};
+const latestPost = async (newPost) => {
+  const response = await fetch(
+    `https://openapi.programming-hero.com/api/retro-forum/${newPost}`,
+  );
+  const data = await response.json();
+  displayLatestNews(data);
 };
 
 // handle search button and input field value
@@ -163,4 +169,53 @@ const markAsRead = (title, viewCount) => {
   `;
   readPost.append(div);
 };
+const displayLatestNews = (latestPost) => {
+  console.log(latestPost);
+  const latestNewsContainer = document.getElementById("latest-news");
+  // To clear previous search results
+  latestNewsContainer.innerHTML = "";
+  latestPost.forEach((post) => {
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <div class="card bg-base-100 p-6 shadow-sm">
+            <figure class="rounded-[20px]">
+              <img
+                src="${post.cover_image}"
+                alt="games-module" 
+              />
+            </figure>
+            <div class="card-body mt-6 space-y-1 p-0">
+              <div class="flex gap-2">
+                <span><i class="far fa-calendar"></i></span>
+                <h5 class="font-[mulish] text-[#12132d99]">${post.author.posted_date ? post.author.posted_date : "Unknown"}</h5>
+              </div>
+              <h2
+                class="card-title font-[mulish] text-lg font-extrabold leading-7 text-[#12132d]"
+              >
+                ${post.title}
+              </h2>
+              <p class="font-[mulish] leading-6 text-[#12132d99]">
+                ${post.description}
+              </p>
+              <div class="flex items-center gap-3">
+                <div class="avatar">
+                  <div class="w-14 rounded-full">
+                    <img
+                      src="${post.profile_image}"
+                    />
+                  </div>
+                </div>
+                <div class="space-y-1">
+                  <h3>${post.author.name}</h3>
+                  <h4>${post.author.designation ? post.author.designation : 'Unknown'}</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+    `;
+    latestNewsContainer.append(div);
+  });
+  
+};
 postCategory("posts?category=coding");
+latestPost("latest-posts");
