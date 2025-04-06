@@ -1,11 +1,14 @@
+// fetching all posts
 const postCategory = async (categoryName) => {
   const response = await fetch(
     `https://openapi.programming-hero.com/api/retro-forum/${categoryName}`,
   );
   const data = await response.json();
   const items = data.posts;
+  console.log(items);
   displaySearchResult(items);
 };
+// fetching latest posts
 const latestPost = async (newPost) => {
   const response = await fetch(
     `https://openapi.programming-hero.com/api/retro-forum/${newPost}`,
@@ -16,6 +19,8 @@ const latestPost = async (newPost) => {
 
 // handle search button and input field value
 const searchQuery = () => {
+  // loading spinner control
+  toggleSpinner(true);
   const searchFieldValue = document.getElementById("input-value").value;
   if (searchFieldValue === "") {
     alert("Please enter a category name");
@@ -30,13 +35,18 @@ const displaySearchResult = (posts) => {
   searchResultContainer.innerHTML = "";
   document.getElementById("title-list").innerHTML = "";
   document.getElementById("read-count").innerText = 0;
-
+  
+  // show error if data not found
+  if (!posts.length) {
+    document.getElementById("invalid-word").classList.remove("hidden");
+  }
+ 
   posts.forEach((post) => {
     const div = document.createElement("div");
 
     if (post.isActive) {
       div.innerHTML = `
-      <div class = "flex flex-col gap-5 rounded-3xl bg-[#f3f3f5] p-10 lg:flex-row">
+      <div class = "flex flex-col gap-5 rounded-3xl bg-[#f3f3f5] p-6 lg:p-10 lg:flex-row">
             <div class="avatar relative top-0 items-start">
               <div class="absolute h-24 w-24 avatar-online"></div>
               <div class="mask mask-squircle w-24">
@@ -148,13 +158,13 @@ const displaySearchResult = (posts) => {
     }
     searchResultContainer.append(div);
   });
+  toggleSpinner(false);
 };
 const markAsRead = (title, viewCount) => {
   const readPost = document.getElementById("title-list");
   const readCount = document.getElementById("read-count").innerText;
   const count = parseInt(readCount) + 1;
   document.getElementById("read-count").innerText = count;
-  console.log("Click hoicae");
   const div = document.createElement("div");
   div.innerHTML = `
             <div
@@ -170,7 +180,6 @@ const markAsRead = (title, viewCount) => {
   readPost.append(div);
 };
 const displayLatestNews = (latestPost) => {
-  console.log(latestPost);
   const latestNewsContainer = document.getElementById("latest-news");
   // To clear previous search results
   latestNewsContainer.innerHTML = "";
@@ -187,7 +196,7 @@ const displayLatestNews = (latestPost) => {
             <div class="card-body mt-6 space-y-1 p-0">
               <div class="flex gap-2">
                 <span><i class="far fa-calendar"></i></span>
-                <h5 class="font-[mulish] text-[#12132d99]">${post.author.posted_date ? post.author.posted_date : "Unknown"}</h5>
+                <h5 class="font-[mulish] text-[#12132d99]">${post.author.posted_date ? post.author.posted_date : "No Published Date"}</h5>
               </div>
               <h2
                 class="card-title font-[mulish] text-lg font-extrabold leading-7 text-[#12132d]"
@@ -207,7 +216,7 @@ const displayLatestNews = (latestPost) => {
                 </div>
                 <div class="space-y-1">
                   <h3>${post.author.name}</h3>
-                  <h4>${post.author.designation ? post.author.designation : 'Unknown'}</h4>
+                  <h4>${post.author.designation ? post.author.designation : "Unknown"}</h4>
                 </div>
               </div>
             </div>
@@ -215,7 +224,19 @@ const displayLatestNews = (latestPost) => {
     `;
     latestNewsContainer.append(div);
   });
-  
+};
+const toggleSpinner = (isFetching) => {
+  if (isFetching) {
+    document.getElementById("loading-spinner").classList.remove("hidden");
+  } else {
+    num = 0;
+    const clockId = setInterval(() => {
+      num++;
+      if (num > 1) {
+        document.getElementById("loading-spinner").classList.add("hidden");
+      }
+    }, 1000);
+  }
 };
 postCategory("posts?category=coding");
 latestPost("latest-posts");
